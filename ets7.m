@@ -28,16 +28,27 @@ SV.q = zeros(6,1);
 
 
 %PD制御をする
-desired_q = [ 0.3 0.2 0.1 0.6 0.5 0.4 ]'; % 目標関節角度
-gain_spring = 10; % ばね定数と減衰係数
-gain_dumper = 10;
+desired_q = [ pi pi/4 pi/3 -pi/6 -pi/3 -pi/2]'; % 目標関節角度
+gain_spring = 75; % ばね定数と減衰係数
+gain_dumper = 100;
 
 
 
 fidw = fopen( 'sample.dat','w' );
 
+%%%%%%%% 描画関連 %%%%%%%%
+figure(6);
+FIG3D = ets7_fig3d();
+axis equal;
+xlabel('X'); ylabel('Y'); zlabel('Z');
+view(3); grid on;
+xlim([-6 6]);
+ylim([-6 6]);
+zlim([-6 6]);
+title('Figure');
 
 %%%%%%%%%%%%%%%%% ここからシミュレーションループスタート %%%%%%%%%%%%%%%%%%%%%%%%%%
+tic;
 for time = 0:d_time:10
 
         time % 現在どのステップを計算しているかを画面に出力（；ついてないので ）
@@ -73,7 +84,16 @@ for time = 0:d_time:10
 
         %%%%%%%%%%%%%%%%%%%%% 結果をファイルに出力 %%%%%%%%%%%%%%%%%%%%%
         fprintf(fidw,'%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n',time,SV.R0,Q0_deg,POS_e,Qe_deg,q_deg);
+
+        %%%%%%%%%%%%%%%%%%%%%%% 描画 %%%%%%%%%%%%%%%%%%%%%%%%%
+        set(FIG3D.base.base, 'Vertices', (SV.A0 * FIG3D.base.vertices_local')' + SV.R0');
+        for i = 1:6
+                set(FIG3D.link(i).link, 'Vertices', (SV.AA(:,i*3-2:i*3) * FIG3D.link(i).vertices_local')' + SV.RR(:,i)');
+        end
+        drawnow;
 end
+elapsedTime = toc;
+disp(['処理時間: ', num2str(elapsedTime), ' 秒']);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% シミュレーションループここまで %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -103,7 +123,7 @@ grid on;
 figure(3)
 plot(tmp(:,1),tmp(:,8:10),'-');
 title('POS_e');
-xlabel('Time [s]'); ylabel('posiion of Hand [m]');
+xlabel('Time [s]'); ylabel('position of Hand [m]');
 grid on;
 
 %%% 手先の姿勢
