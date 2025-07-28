@@ -3,6 +3,7 @@ clc
 clear
 close all
 addpath('./SpaceDyn/src/matlab/spacedyn_v2r1'); % SpaceDynのパスを追加
+addpath('./torque_traj'); % SpaceDynのパスを追加
 
 %%%%%%%%%%%%%%%%% global 変数の定義 %%%%%%%%%%%%%%%%%%%%
 global d_time
