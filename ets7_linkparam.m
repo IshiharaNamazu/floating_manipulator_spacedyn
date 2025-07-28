@@ -114,6 +114,5 @@ Iln(:, :, 6) = [
 
 % 6つの3x3行列を横に並べて3x18行列を作成
 LP.inertia = reshape(Iln, 3, 18);
-LP.inertia
 
 return
