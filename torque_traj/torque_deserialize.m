@@ -1,5 +1,5 @@
 function torque_param = torque_deserialize(serialized)
-serialized = serialized'
+serialized = serialized';
 n_segments = length(serialized) / 13; % 1時間 + 6初期 + 6終了 = 13
 torque_param = cell(n_segments, 3);
 

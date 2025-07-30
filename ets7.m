@@ -14,7 +14,7 @@ global Ez
 Ez =[0 0 1]';
 Gravity =[0 0 0]'; % 重力（地球重力ならば Gravity = [0 0 -9.8]）
 
-d_time =0.01; % シミュレーションの１ステップあたりの時間
+d_time =0.001; % シミュレーションの１ステップあたりの時間
 
 %%%%%%%%%%%% リンクパラメータ定義と変数の初期化 %%%%%%%%%%%%%%%%%
 LP = ets7_linkparam();%LP１とかにしてもよいi.         Sample_LP()を呼び出してLPに格納
@@ -87,11 +87,11 @@ for time = 0:d_time:10
         fprintf(fidw,'%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g\n',time,SV.R0,Q0_deg,POS_e,Qe_deg,q_deg);
 
         %%%%%%%%%%%%%%%%%%%%%%% 描画 %%%%%%%%%%%%%%%%%%%%%%%%%
-        set(FIG3D.base.base, 'Vertices', (SV.A0 * FIG3D.base.vertices_local')' + SV.R0');
-        for i = 1:6
-                set(FIG3D.link(i).link, 'Vertices', (SV.AA(:,i*3-2:i*3) * FIG3D.link(i).vertices_local')' + SV.RR(:,i)');
-        end
-        drawnow;
+        %set(FIG3D.base.base, 'Vertices', (SV.A0 * FIG3D.base.vertices_local')' + SV.R0');
+        %for i = 1:6
+        %        set(FIG3D.link(i).link, 'Vertices', (SV.AA(:,i*3-2:i*3) * FIG3D.link(i).vertices_local')' + SV.RR(:,i)');
+        %end
+        %drawnow;
 end
 elapsedTime = toc;
 disp(['処理時間: ', num2str(elapsedTime), ' 秒']);
@@ -125,6 +125,7 @@ figure(3)
 plot(tmp(:,1),tmp(:,8:10),'-');
 title('POS_e');
 xlabel('Time [s]'); ylabel('position of Hand [m]');
+legend('X', 'Y', 'Z');
 grid on;
 
 %%% 手先の姿勢

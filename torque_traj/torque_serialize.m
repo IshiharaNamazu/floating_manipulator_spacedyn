@@ -1,4 +1,4 @@
-function serialized = torque_serialize(torque_param)
+function serialized = torque_serialize(torque_param);
 serialized = [];
 for i = 1:size(torque_param, 1)
     % 時間
