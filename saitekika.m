@@ -98,7 +98,7 @@ while true
     output.funcCount = 345;
     x=x0;
     fval = 1.23;
-    %[x, fval, exitflag, output] = fmincon(@sum_torque_param_first_column, x0, A, bb, Aeq, beq, lb, ub, @nonlinear_con, options);
+    [x, fval, exitflag, output] = fmincon(@sum_torque_param_first_column, x0, A, bb, Aeq, beq, lb, ub, @nonlinear_con, options);
     disp(torque_deserialize(x))
 
     % 結果の確認
