@@ -1,4 +1,11 @@
-function saitekika()
+function saitekika(pid, par_i)
+if nargin < 2
+    pid = 0;
+    par_i = 0;
+end
+
+% disp(['pid:', num2str(pid)])
+% disp(['par_i:', num2str(par_i)])
 
 addpath('./SpaceDyn/src/matlab/spacedyn_v2r1'); % SpaceDyn のパスを追加
 addpath('./torque_traj'); % SpaceDyn のパスを追加
@@ -30,15 +37,17 @@ disp(["onetime_execution="+ string(onetime_execution)])
         end
     end
 
-while true
+for loop_saitekika=1:300
     %clc
     %close all
-
-    rng('shuffle'); % 現在時刻をシードにする
+    nanoTime = java.lang.System.nanoTime();
+    clk = sum(100000 * clock);
+    rng(mod(bitxor(nanoTime + pid + round(clk) + par_i, pid * par_i), 2^32)); % 現在時刻をシードにする
 
 
 
     torque_param = {
+        2, zeros(1,6), zeros(1,6);
         2, zeros(1,6), zeros(1,6);
         };
     length(torque_param)
@@ -68,7 +77,7 @@ while true
     [rows, cols] = size(torque_param);
     for i = 1:rows
         lb = [lb 0.5 -max_torque.*ones(1,6) -max_torque.*ones(1,6)]; % 各トルクの時間は0.5秒以上
-        ub = [ub 10 max_torque.*ones(1,6) max_torque.*ones(1,6)]; % 各トルクの時間は0.5秒以上
+        ub = [ub 15 max_torque.*ones(1,6) max_torque.*ones(1,6)]; % 各トルクの時間は0.5秒以上
     end
 
     for i = 1:rows

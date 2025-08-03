@@ -37,7 +37,7 @@ fprintf('%d個の最適化を並列実行開始...\n', n);
 parfor i = 1:n
     try
         fprintf('ワーカー %d: 最適化開始\n', i);
-        saitekika();
+        saitekika(feature('getpid'), i);
         fprintf('ワーカー %d: 最適化完了\n', i);
     catch ME
         fprintf('ワーカー %d: エラー発生 - %s\n', i, ME.message);
