@@ -1,13 +1,13 @@
 function randsaitekika_parallel(n)
 % デフォルト値の設定
 if nargin < 1
-    n = 4;  % デフォルトで4個並列実行
+    n = 16;  % デフォルトでn個並列実行
 end
 c = parcluster('local');
 if(c.NumWorkers < n)
     c.NumWorkers = n;
+    saveProfile(c);
 end
-saveProfile(c);
 
 % Parallel Computing Toolboxの確認
 if ~license('test', 'Distrib_Computing_Toolbox')
