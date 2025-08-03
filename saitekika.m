@@ -40,9 +40,8 @@ while true
 
     torque_param = {
         2, zeros(1,6), zeros(1,6);
-        2, zeros(1,6), zeros(1,6);
-        2, zeros(1,6), zeros(1,6);
         };
+    length(torque_param)
 
     x0 = torque_serialize(torque_param); % 後で乱数で初期化する
 
@@ -65,12 +64,14 @@ while true
     ub = [];
 
     max_torque = 50; % 最大トルク
-    for i = 1:length(torque_param)
+
+    [rows, cols] = size(torque_param);
+    for i = 1:rows
         lb = [lb 0.5 -max_torque.*ones(1,6) -max_torque.*ones(1,6)]; % 各トルクの時間は0.5秒以上
         ub = [ub 10 max_torque.*ones(1,6) max_torque.*ones(1,6)]; % 各トルクの時間は0.5秒以上
     end
 
-    for i = 1:length(x0)
+    for i = 1:rows
         x0(i) = lb(i) + (ub(i) - lb(i)) * rand;
     end
 
