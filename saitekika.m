@@ -126,15 +126,17 @@ while true
             fprintf('その他のエラー（exitflag: %d）\n', exitflag);
     end
 
-    s=rng;
-    seed_value = s.Seed;
-    row = [exitflag, output.iterations, output.funcCount, fval, int64(seed_value)];
-    fid = fopen('result.csv', 'a');
-    fprintf(fid, '%ld,', row(1:end));
-    fprintf(fid, '%f,', x(1:end-1));
-    fprintf(fid, '%f\n', x(end));
-    fclose(fid);
-    %ets7_dyn(torque_param)
+    if exitflag ~= -2
+        s=rng;
+        seed_value = s.Seed;
+        row = [exitflag, output.iterations, output.funcCount, fval, int64(seed_value)];
+        fid = fopen('result.csv', 'a');
+        fprintf(fid, '%ld,', row(1:end));
+        fprintf(fid, '%f,', x(1:end-1));
+        fprintf(fid, '%f\n', x(end));
+        fclose(fid);
+        %ets7_dyn(torque_param)
+    end
     if onetime_execution
         break
     end
