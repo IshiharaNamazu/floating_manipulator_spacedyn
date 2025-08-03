@@ -1,5 +1,6 @@
 sample.dat
-# Autosave files
+result.csv
+v Autosave files
 *.asv
 *.m~
 *.autosave

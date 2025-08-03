@@ -34,13 +34,16 @@ SV.q = zeros(6,1);
 
 %%%%%%%% history %%%%%%%%
 time_array = 0:d_time:t_all;
-pos_e_history = zeros(3, length(time_array))
+pos_e_history = zeros(3, length(time_array));
 
 %%%%%%%%%%%%%%%%% ここからシミュレーションループスタート %%%%%%%%%%%%%%%%%%%%%%%%%%
-tic;
+tic; % 計測開始
+itr = 0;
 for time = time_array
-
-        fprintf('\rprogress: %f/%f', time, t_all);
+        itr = itr + 1;
+        if mod(itr, 100) == 0
+                fprintf('\rprogress: %f/%f', time, t_all);
+        end
 
         %%%%%%%%%%%%%%%% 目標トルク制御の計算 %%%%%%%%%%%%%%%%%%%
         SV.tau = calc_torque(torque_param, time);
