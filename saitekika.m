@@ -73,8 +73,7 @@ while true
 
 
 
-    options = optimoptions('fmincon', ...
-        'Algorithm', 'interior-point', ...         % 内点法（制約内から最適解を探す）
+    options = optimoptions("fmincon",...
         'HonorBounds', true, ...                   % 境界制約を常に守る
         'Display', 'iter', ...                     % 進行状況を表示
         'MaxIterations', 1000, ...                 % 最大反復回数
@@ -84,7 +83,10 @@ while true
         'HessianApproximation', 'lbfgs', ...       % ヘッセ行列を近似
         'ScaleProblem', true, ...                  % 問題をスケーリング
         'SpecifyObjectiveGradient', false, ...
-        'SpecifyConstraintGradient', false);
+        'SpecifyConstraintGradient', false, ...
+        Algorithm="interior-point",...
+        EnableFeasibilityMode=true,...
+        SubproblemAlgorithm="cg");
 
     %x=x0
     %fval = 1.23;
@@ -119,8 +121,8 @@ while true
             fprintf('その他のエラー（exitflag: %d）\n', exitflag);
     end
 
-
-    row = [exitflag, fval, output.iterations, rng.Seed, x];
+    s=rng
+    row = [exitflag, fval, output.iterations, s.Seed, x];
     fid = fopen('result.csv', 'a');
     fprintf(fid, '%g,', row(1:end-1));
     fprintf(fid, '%g\n', row(end));
