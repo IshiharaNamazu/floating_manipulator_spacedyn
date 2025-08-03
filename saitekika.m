@@ -5,6 +5,8 @@ clc
 clear
 close all
 
+seed = 928; % 任意のseed値を指定
+rng(seed); % 乱数の初期化
 
 torque_param = {
     2, zeros(1,6), zeros(1,6);
@@ -96,7 +98,7 @@ switch exitflag
 end
 
 
-row = [exitflag, x];
+row = [exitflag, seed, x];
 fid = fopen('result.csv', 'a');
 fprintf(fid, '%g,', row(1:end-1));
 fprintf(fid, '%g\n', row(end));
