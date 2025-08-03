@@ -1,12 +1,17 @@
 function saitekika()
-clc
-clear
-close all
 
 addpath('./SpaceDyn/src/matlab/spacedyn_v2r1'); % SpaceDyn のパスを追加
 addpath('./torque_traj'); % SpaceDyn のパスを追加
 
-onetime_execution = false;
+global onetime_execution
+
+% 値が未定義（未初期化）なら初期化する
+if ~evalin('base', 'exist(''onetime_execution'', ''var'')')
+    onetime_execution = false;
+end
+
+disp(["onetime_execution="+ string(onetime_execution)])
+
 
 %% 非線形制約
     function [c, ceq] = nonlinear_con(x)
