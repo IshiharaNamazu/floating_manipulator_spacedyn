@@ -24,7 +24,7 @@ disp(["onetime_execution="+ string(onetime_execution)])
     function [c, ceq] = nonlinear_con(x)
         v = ets7_dyn(torque_deserialize(x));
         c = [];
-        ceq = [v];
+        ceq = v;
     end
 
 %% 目的関数
@@ -37,7 +37,7 @@ disp(["onetime_execution="+ string(onetime_execution)])
         end
     end
 
-for loop_saitekika=1:300
+for loop_saitekika=1:500
     %clc
     %close all
     nanoTime = java.lang.System.nanoTime();
@@ -76,7 +76,7 @@ for loop_saitekika=1:300
 
     [rows, cols] = size(torque_param);
     for i = 1:rows
-        lb = [lb 0.5 -max_torque.*ones(1,6) -max_torque.*ones(1,6)]; % 各トルクの時間は0.5秒以上
+        lb = [lb 0.2 -max_torque.*ones(1,6) -max_torque.*ones(1,6)]; % 各トルクの時間は0.5秒以上
         ub = [ub 15 max_torque.*ones(1,6) max_torque.*ones(1,6)]; % 各トルクの時間は0.5秒以上
     end
 

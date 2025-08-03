@@ -1,4 +1,4 @@
-﻿function value = ets7_dyn(torque_param)
+function values = ets7_dyn(torque_param)
 
 %%%%%%%%%%%%%%%%% global 変数の定義 %%%%%%%%%%%%%%%%%%%%
 global d_time
@@ -13,7 +13,7 @@ Gravity =[0 0 0]'; % 重力（地球重力ならば Gravity = [0 0 -9.8]）
 d_time =0.01; % シミュレーションの１ステップあたりの時間
 
 %%%%%%%%%%%%%%% 変数初期化 %%%%%%%%%%%%%%%%%
-value = 0;
+values = [];
 t_all = 0;
 for i = 1:size(torque_param, 1)
         t_all = t_all + torque_param{i, 1};
@@ -76,6 +76,6 @@ desired_pos_e = [-0.480; -1.551; 2.51]; % 目標手先位置
 pos_e_error = pos_e_history - desired_pos_e;
 
 % 評価関数の値を計算
-value = sum(pos_e_error(:, end).^2);
+values = [sum(pos_e_error(:, end).^2), sum(SV.qd.^2)];
 
 %%% EOF
