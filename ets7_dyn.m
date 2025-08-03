@@ -41,9 +41,9 @@ tic; % 計測開始
 itr = 0;
 for time = time_array
         itr = itr + 1;
-        if mod(itr, 100) == 0
-                fprintf('\rprogress: %f/%f', time, t_all);
-        end
+        % if mod(itr, 100) == 0
+        %         fprintf('\rprogress: %f/%f', time, t_all);
+        % end
 
         %%%%%%%%%%%%%%%% 目標トルク制御の計算 %%%%%%%%%%%%%%%%%%%
         SV.tau = calc_torque(torque_param, time);
@@ -65,7 +65,7 @@ for time = time_array
         pos_e_history(:, round(time/d_time) + 1) = POS_e;
 end
 elapsedTime = toc;
-disp(['処理時間: ', num2str(elapsedTime), ' 秒']);
+disp(['処理時間: ', num2str(elapsedTime), '/', num2str(t_all), ' 秒']);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% シミュレーションループここまで %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

@@ -74,7 +74,7 @@ while true
         x0(i) = lb(i) + (ub(i) - lb(i)) * rand;
     end
 
-    disp(["x0初期値:", x0]);
+    % disp(["x0初期値:", x0]);
 
 
 
@@ -93,20 +93,20 @@ while true
         EnableFeasibilityMode=true,...
         SubproblemAlgorithm="cg");
 
-    %x=x0
-    %fval = 1.23;
-    %output.iterations = 123;
-    %exitflag = 123;
-    %output.funcCount = 123;
+    x=x0;
+    fval = 1.23;
+    output.iterations = 123;
+    exitflag = 123;
+    output.funcCount = 123;
     [x, fval, exitflag, output] = fmincon(@sum_torque_param_first_column, x0, A, bb, Aeq, beq, lb, ub, @nonlinear_con, options);
     disp(torque_deserialize(x))
 
     % 結果の確認
     fprintf('最適化結果:\n');
-    fprintf('目的関数値: %.6f\n', fval);
     fprintf('終了フラグ: %d\n', exitflag);
     fprintf('反復回数: %d\n', output.iterations);
     fprintf('関数評価回数: %d\n', output.funcCount);
+    fprintf('目的関数値: %.6f\n', fval);
 
     % 終了フラグの判定
     switch exitflag
@@ -127,10 +127,11 @@ while true
     end
 
     s=rng
-    row = [exitflag, fval, output.iterations, s.Seed, x];
+    row = [exitflag, output.iterations, output.funcCount, fval, s.Seed];
     fid = fopen('result.csv', 'a');
-    fprintf(fid, '%g,', row(1:end-1));
-    fprintf(fid, '%g\n', row(end));
+    fprintf(fid, '%g,', row(1:end));
+    fprintf(fid, '%f,', x(1:end-1));
+    fprintf(fid, '%f\n', row(end));
     fclose(fid);
     %ets7_dyn(torque_param)
     if onetime_execution
