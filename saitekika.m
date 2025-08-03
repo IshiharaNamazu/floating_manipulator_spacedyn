@@ -93,12 +93,12 @@ while true
         EnableFeasibilityMode=true,...
         SubproblemAlgorithm="cg");
 
+    exitflag = -2;
+    output.iterations = 123;
+    output.funcCount = 345;
     x=x0;
     fval = 1.23;
-    output.iterations = 123;
-    exitflag = 123;
-    output.funcCount = 123;
-    [x, fval, exitflag, output] = fmincon(@sum_torque_param_first_column, x0, A, bb, Aeq, beq, lb, ub, @nonlinear_con, options);
+    %[x, fval, exitflag, output] = fmincon(@sum_torque_param_first_column, x0, A, bb, Aeq, beq, lb, ub, @nonlinear_con, options);
     disp(torque_deserialize(x))
 
     % 結果の確認
@@ -126,12 +126,13 @@ while true
             fprintf('その他のエラー（exitflag: %d）\n', exitflag);
     end
 
-    s=rng
-    row = [exitflag, output.iterations, output.funcCount, fval, s.Seed];
+    s=rng;
+    seed_value = s.Seed;
+    row = [exitflag, output.iterations, output.funcCount, fval, int64(seed_value)];
     fid = fopen('result.csv', 'a');
-    fprintf(fid, '%g,', row(1:end));
+    fprintf(fid, '%ld,', row(1:end));
     fprintf(fid, '%f,', x(1:end-1));
-    fprintf(fid, '%f\n', row(end));
+    fprintf(fid, '%f\n', x(end));
     fclose(fid);
     %ets7_dyn(torque_param)
     if onetime_execution
