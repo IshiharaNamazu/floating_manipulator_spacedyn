@@ -1,10 +1,6 @@
-function saitekika(seed)
+function saitekika()
 
-if nargin < 1
-    seed = 928;  % デフォルトのシード値
-end
 
-rng(seed); % 乱数の初期化
 addpath('./SpaceDyn/src/matlab/spacedyn_v2r1'); % SpaceDyn のパスを追加
 addpath('./torque_traj'); % SpaceDyn のパスを追加
 
@@ -28,6 +24,9 @@ addpath('./torque_traj'); % SpaceDyn のパスを追加
 while true
     %clc
     %close all
+
+    rng('shuffle'); % 現在時刻をシードにする
+
 
 
     torque_param = {
@@ -109,7 +108,7 @@ while true
     end
 
 
-    row = [exitflag, seed, x];
+    row = [exitflag, rng.Seed, x];
     fid = fopen('result.csv', 'a');
     fprintf(fid, '%g,', row(1:end-1));
     fprintf(fid, '%g\n', row(end));

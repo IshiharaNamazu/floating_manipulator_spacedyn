@@ -1,1 +1,1 @@
-saitekika(928)
+saitekika()
