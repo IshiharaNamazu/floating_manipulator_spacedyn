@@ -1,12 +1,16 @@
 function saitekika()
-
+clc
+clear
+close all
 
 addpath('./SpaceDyn/src/matlab/spacedyn_v2r1'); % SpaceDyn のパスを追加
 addpath('./torque_traj'); % SpaceDyn のパスを追加
 
+onetime_execution = false;
+
 %% 非線形制約
     function [c, ceq] = nonlinear_con(x)
-        v = ets7_dyn(torque_deserialize(x))
+        v = ets7_dyn(torque_deserialize(x));
         c = [];
         ceq = [v];
     end
@@ -70,9 +74,17 @@ while true
 
 
     options = optimoptions('fmincon', ...
-        'MaxIterations', 1000, ...        % 最大反復回数
-        'MaxFunctionEvaluations', 3000, ... % 最大関数評価回数
-        'Display', 'iter');              % 進行状況を表示
+        'Algorithm', 'interior-point', ...         % 内点法（制約内から最適解を探す）
+        'HonorBounds', true, ...                   % 境界制約を常に守る
+        'Display', 'iter', ...                     % 進行状況を表示
+        'MaxIterations', 1000, ...                 % 最大反復回数
+        'MaxFunctionEvaluations', 3000, ...        % 最大関数評価回数
+        'ConstraintTolerance', 1e-6, ...           % 制約の許容誤差
+        'StepTolerance', 1e-12, ...                % ステップ幅の許容誤差（小さくして粘る）
+        'HessianApproximation', 'lbfgs', ...       % ヘッセ行列を近似
+        'ScaleProblem', true, ...                  % 問題をスケーリング
+        'SpecifyObjectiveGradient', false, ...
+        'SpecifyConstraintGradient', false);
 
     %x=x0
     %fval = 1.23;
@@ -108,12 +120,14 @@ while true
     end
 
 
-    row = [exitflag, rng.Seed, x];
+    row = [exitflag, fval, output.iterations, rng.Seed, x];
     fid = fopen('result.csv', 'a');
     fprintf(fid, '%g,', row(1:end-1));
     fprintf(fid, '%g\n', row(end));
     fclose(fid);
     %ets7_dyn(torque_param)
-
+    if onetime_execution
+        break
+    end
 end
 end
